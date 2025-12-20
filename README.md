@@ -5,9 +5,9 @@
 ---
 
 ## 🚀 Live Demo
-🔗 [View Live Demo](https://your-username.github.io/whats-for-dinner)  
-*(Replace with your GitHub Pages URL)*
-
+🔗 [[View Live Demo](https://your-username.github.io/whats-for-dinner)  
+*([Replace with your GitHub Pages URL](https://www.awesomescreenshot.com/video/47673793?key=48c112f9ca5299d19dd140ac6c2e243d))*
+](https://www.awesomescreenshot.com/video/47673793?key=48c112f9ca5299d19dd140ac6c2e243d)
 ---
 
 ## 📸 Screenshots
@@ -24,8 +24,6 @@
 - **Responsive Design** - Works on all devices (mobile, tablet, desktop)
 - **Recipe Display** - Beautiful recipe cards with images and details
 - **Interactive UI** - Like, save, and print recipes
-- **Filter System** - Filter by category (vegetarian, quick, etc.)
-- **Search Function** - Find recipes by name or ingredients
 - **Dynamic Content** - JavaScript-powered recipe rendering
 - **Print Functionality** - Print recipes directly from the browser
 
@@ -50,5 +48,3 @@
 | **Google Fonts** | Typography (Poppins, Open Sans) | - |
 
 ---
-
-## 📁 Project Structure
