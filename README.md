@@ -1,14 +1,18 @@
-# 🍽️ What's For Dinner - Recipe Website
+🍽️ What's For Dinner - Recipe Website
+End the daily "what to cook?" struggle with a beautifully designed, responsive recipe discovery website built with HTML, CSS, Bootstrap, and JavaScript.
 
-**A responsive recipe discovery website built with HTML, CSS, Bootstrap, and JavaScript.**
+✨ Key Features
+Dynamic Content & Filtering: Explore and filter recipes by cuisine, time, and dietary needs.
 
----
+Fully Interactive UI: Bookmark favorites, print recipes with one click, and use a live search.
 
-## 🚀 Live Demo
-🔗 [[View Live Demo](https://your-username.github.io/whats-for-dinner)  
-*((https://www.awesomescreenshot.com/video/47673793?key=48c112f9ca5299d19dd140ac6c2e243d))*
-](https://www.awesomescreenshot.com/video/47673793?key=48c112f9ca5299d19dd140ac6c2e243d)
----
+Mobile-First & Responsive: Seamless experience across all devices thanks to Bootstrap.
+
+Modern Frontend Stack: Built with vanilla JS for performance, Bootstrap for layout, and custom CSS.
+
+🚀 See It In Action!
+Live Demo & Full Walkthrough Video: Watch the Complete Demo on Awesome Screenshot https://www.awesomescreenshot.com/video/47673793?key=48c112f9ca5299d19dd140ac6c2e243d
+
 
 ## 📸 Screenshots
 <img width="1896" height="928" alt="image" src="https://github.com/user-attachments/assets/5466299b-95be-4442-8a35-6bb7a24fced1" />
