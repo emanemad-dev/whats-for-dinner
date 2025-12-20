@@ -1,0 +1,54 @@
+# 🍽️ What's For Dinner - Recipe Website
+
+**A responsive recipe discovery website built with HTML, CSS, Bootstrap, and JavaScript.**
+
+---
+
+## 🚀 Live Demo
+🔗 [View Live Demo](https://your-username.github.io/whats-for-dinner)  
+*(Replace with your GitHub Pages URL)*
+
+---
+
+## 📸 Screenshots
+<img width="1896" height="928" alt="image" src="https://github.com/user-attachments/assets/5466299b-95be-4442-8a35-6bb7a24fced1" />
+<img width="1891" height="928" alt="image" src="https://github.com/user-attachments/assets/505c404f-e370-4250-b75e-12503af71b78" />
+<img width="1882" height="930" alt="image" src="https://github.com/user-attachments/assets/943563b0-e4dc-49b6-96d7-91134e9dd759" />
+<img width="1874" height="930" alt="image" src="https://github.com/user-attachments/assets/f0bf65ad-40c7-4504-8f16-b2a5e175db19" />
+
+---
+
+## ✨ Features
+
+### ✅ **Implemented**
+- **Responsive Design** - Works on all devices (mobile, tablet, desktop)
+- **Recipe Display** - Beautiful recipe cards with images and details
+- **Interactive UI** - Like, save, and print recipes
+- **Filter System** - Filter by category (vegetarian, quick, etc.)
+- **Search Function** - Find recipes by name or ingredients
+- **Dynamic Content** - JavaScript-powered recipe rendering
+- **Print Functionality** - Print recipes directly from the browser
+
+### 🔜 **Coming Soon**
+- **User Accounts** - Save favorites and preferences
+- **Meal Planner** - Weekly meal planning calendar
+- **Shopping List** - Auto-generate from selected recipes
+- **Dark Mode** - Toggle between light/dark themes
+- **More Recipes** - Expand recipe database
+
+---
+
+## 🛠️ Technologies Used
+
+| Technology | Purpose | Version |
+|------------|---------|---------|
+| **HTML5** | Page structure and content | Latest |
+| **CSS3** | Styling and animations | Latest |
+| **Bootstrap 5** | Responsive framework and components | 5.3.0 |
+| **JavaScript (ES6+)** | Interactivity and dynamic content | ES6+ |
+| **Font Awesome** | Icons and visual elements | 6.4.0 |
+| **Google Fonts** | Typography (Poppins, Open Sans) | - |
+
+---
+
+## 📁 Project Structure
