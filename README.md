@@ -6,7 +6,7 @@
 
 ## 🚀 Live Demo
 🔗 [[View Live Demo](https://your-username.github.io/whats-for-dinner)  
-*([Replace with your GitHub Pages URL](https://www.awesomescreenshot.com/video/47673793?key=48c112f9ca5299d19dd140ac6c2e243d))*
+*((https://www.awesomescreenshot.com/video/47673793?key=48c112f9ca5299d19dd140ac6c2e243d))*
 ](https://www.awesomescreenshot.com/video/47673793?key=48c112f9ca5299d19dd140ac6c2e243d)
 ---
 
