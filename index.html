@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>What's For Dinner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        /* ============================================================================ */
+        /* CUSTOM CSS STYLES */
+        /* Minimal custom styles that cannot be fully achieved with Bootstrap classes */
+        /* ============================================================================ */
+
+        /* ---------------------------------------------------------------------------- */
+        /* BODY STYLES */
+        /* Background color and padding adjustments */
+        /* ---------------------------------------------------------------------------- */
+        body {
+            background: #fffaf0;
+            /* Light warm background color */
+            padding-top: 90px;
+            /* Offset for fixed navigation bar */
+        }
+
+        /* ---------------------------------------------------------------------------- */
+        /* RECIPE CARD STYLES */
+        /* Main container styling for recipe display */
+        /* ---------------------------------------------------------------------------- */
+        .meal-card {
+            border-radius: 24px;
+            /* Large rounded corners for modern look */
+            overflow: visible;
+            /* Allows stats box to extend beyond card */
+        }
+
+        /* ---------------------------------------------------------------------------- */
+        /* RECIPE IMAGE STYLES */
+        /* Image container and cropping settings */
+        /* ---------------------------------------------------------------------------- */
+        .meal-img {
+            width: 100%;
+            /* Full width of container */
+            min-height: 420px;
+            /* Minimum height for consistent layout */
+            height: 100%;
+            /* Full height of container */
+            object-fit: cover;
+            /* Crop image to fill container */
+            border-top-left-radius: 24px;
+            /* Match card border radius */
+            border-bottom-left-radius: 24px;
+            /* Match card border radius */
+        }
+
+        /* ---------------------------------------------------------------------------- */
+        /* STATS BOX STYLES */
+        /* Overlay box showing prep time, cook time, and servings */
+        /* ---------------------------------------------------------------------------- */
+        .stats-box {
+            position: absolute;
+            /* Position relative to image container */
+            bottom: 30px;
+            /* Distance from bottom of image */
+            left: 50%;
+            /* Center horizontally */
+            transform: translateX(-50%);
+            /* Center alignment correction */
+            background: #fff;
+            /* White background */
+            border-radius: 20px;
+            /* Rounded corners */
+            padding: 20px 40px;
+            /* Internal spacing */
+            display: flex;
+            /* Flex layout for stats */
+            justify-content: space-between;
+            /* Even spacing between stats */
+            width: 85%;
+            /* Relative width to container */
+            max-width: 420px;
+            /* Maximum width limit */
+            text-align: center;
+            /* Center text alignment */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+            /* Subtle shadow for depth */
+        }
+
+        /* ---------------------------------------------------------------------------- */
+        /* CUSTOM TAB STYLING */
+        /* Override Bootstrap's default tab styles */
+        /* ---------------------------------------------------------------------------- */
+        .nav-tabs .nav-link {
+            border: none;
+            /* Remove default borders */
+            color: #6c757d;
+            /* Default tab color */
+            font-weight: 500;
+            /* Medium font weight */
+            transition: all 0.3s;
+            /* Smooth transition for hover effects */
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: #ff9800;
+            /* Orange color on hover */
+            background-color: transparent;
+            /* Transparent background */
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #ff9800;
+            /* Orange color for active tab */
+            border-bottom: 3px solid #ff9800;
+            /* Orange underline for active tab */
+            background-color: transparent;
+            /* Transparent background */
+        }
+
+        /* ---------------------------------------------------------------------------- */
+        /* INSTRUCTIONS LIST STYLING */
+        /* Custom numbered list for recipe steps */
+        /* ---------------------------------------------------------------------------- */
+        .instructions-list .list-group-item {
+            counter-increment: step-counter;
+            /* CSS counter for step numbers */
+            padding-left: 50px;
+            /* Space for step numbers */
+            position: relative;
+            /* Positioning context for pseudo-element */
+            border: none;
+            /* Remove default borders */
+            border-left: 3px solid transparent;
+            /* Left border for visual separation */
+            background: transparent;
+            /* Transparent background */
+        }
+
+        .instructions-list .list-group-item:before {
+            content: counter(step-counter);
+            /* Display step number */
+            background-color: #ff9800;
+            /* Orange background for numbers */
+            color: white;
+            /* White text color */
+            font-weight: bold;
+            /* Bold numbers */
+            width: 32px;
+            /* Fixed width for circle */
+            height: 32px;
+            /* Fixed height for circle */
+            border-radius: 50%;
+            /* Circular shape */
+            display: inline-flex;
+            /* Flex display for centering */
+            align-items: center;
+            /* Vertical centering */
+            justify-content: center;
+            /* Horizontal centering */
+            position: absolute;
+            /* Absolute positioning */
+            left: 10px;
+            /* Distance from left */
+            top: 50%;
+            /* Center vertically */
+            transform: translateY(-50%);
+            /* Vertical centering correction */
+        }
+
+        /* ---------------------------------------------------------------------------- */
+        /* INGREDIENTS LIST STYLING */
+        /* Custom bullet points for ingredients */
+        /* ---------------------------------------------------------------------------- */
+        .ingredients-list .list-group-item {
+            padding-left: 35px;
+            /* Space for bullet points */
+            position: relative;
+            /* Positioning context for pseudo-element */
+            border: none;
+            /* Remove default borders */
+            border-bottom: 1px solid #f0f0f0;
+            /* Light bottom border for separation */
+            background: transparent;
+            /* Transparent background */
+        }
+
+        .ingredients-list .list-group-item:before {
+            content: "•";
+            /* Bullet point character */
+            color: #ff9800;
+            /* Orange color for bullet */
+            font-size: 24px;
+            /* Larger bullet size */
+            position: absolute;
+            /* Absolute positioning */
+            left: 10px;
+            /* Distance from left */
+            top: -2px;
+            /* Vertical alignment adjustment */
+        }
+
+        /* ---------------------------------------------------------------------------- */
+        /* TIPS LIST STYLING */
+        /* Custom styling for chef's tips */
+        /* ---------------------------------------------------------------------------- */
+        .tips-list .list-group-item {
+            background: #fff8e1;
+            /* Light yellow background */
+            border-left: 4px solid #ffc107;
+            /* Yellow left border */
+            margin-bottom: 10px;
+            /* Space between tips */
+            border-radius: 8px;
+            /* Rounded corners */
+            padding: 15px;
+            /* Internal padding */
+            border-top: none;
+            /* Remove top border */
+            border-right: none;
+            /* Remove right border */
+            border-bottom: 1px solid #ffecb3;
+            /* Light yellow bottom border */
+        }
+
+        /* ---------------------------------------------------------------------------- */
+        /* NUTRITION GRID STYLING */
+        /* Custom styling for nutrition information cards */
+        /* ---------------------------------------------------------------------------- */
+        .nutrition-grid .card {
+            border-left: 4px solid #ff9800;
+            /* Orange left border for nutrition cards */
+        }
+
+        /* ---------------------------------------------------------------------------- */
+        /* TAB CONTENT CONTAINER */
+        /* Scrollable area for tab content */
+        /* ---------------------------------------------------------------------------- */
+        .tab-content-container {
+            max-height: 320px;
+            /* Fixed maximum height */
+            overflow-y: auto;
+            /* Vertical scrolling enabled */
+        }
+
+        /* ---------------------------------------------------------------------------- */
+        /* CUSTOM SCROLLBAR STYLING */
+        /* Webkit-based scrollbar customization */
+        /* ---------------------------------------------------------------------------- */
+        .tab-content-container::-webkit-scrollbar {
+            width: 6px;
+            /* Narrow scrollbar width */
+        }
+
+        .tab-content-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            /* Light gray track background */
+            border-radius: 10px;
+            /* Rounded track */
+        }
+
+        .tab-content-container::-webkit-scrollbar-thumb {
+            background: #ffc107;
+            /* Yellow scrollbar thumb */
+            border-radius: 10px;
+            /* Rounded thumb */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================================================ -->
+    <!-- NAVIGATION BAR -->
+    <!-- Fixed top navigation bar with application branding and user controls -->
+    <!-- ============================================================================ -->
+    <nav class="navbar navbar-expand-lg bg-white fixed-top shadow-sm">
+        <!-- Container for responsive layout and padding -->
+        <div class="container px-4">
+            <!-- ==================================================================== -->
+            <!-- BRAND/LOGO SECTION -->
+            <!-- Left side of navbar with application name and icon -->
+            <!-- ==================================================================== -->
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <!-- Logo Icon Container -->
+                <!-- Circular background with utensil emoji -->
+                <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center"
+                    style="width:40px;height:40px">
+                    🍴
+                </div>
+
+                <!-- Application Name and Tagline -->
+                <div>
+                    <!-- Main Application Title -->
+                    <div class="fw-bold">What's For Dinner</div>
+                    <!-- Subtitle/Description -->
+                    <small class="text-muted" style="font-size:12px">Your daily meal inspiration</small>
+                </div>
+            </a>
+
+            <!-- ==================================================================== -->
+            <!-- USER CONTROLS SECTION -->
+            <!-- Right side of navbar with action buttons and user profile -->
+            <!-- ==================================================================== -->
+            <div class="d-flex align-items-center gap-2 ms-auto">
+                <!-- Save Recipe Button -->
+                <!-- Bookmark icon to save current recipe to favorites -->
+                <button class="btn btn-light rounded-circle" onclick="saveRecipe()" title="Save Recipe">
+                    <i class="bi bi-bookmark fs-5"></i>
+                </button>
+
+                <!-- Random Recipe Button -->
+                <!-- Refresh icon to load a random recipe -->
+                <button class="btn btn-light rounded-circle" onclick="loadRandomMeal()" title="Random Recipe">
+                    <i class="bi bi-arrow-clockwise fs-5"></i>
+                </button>
+
+                <!-- Settings Button -->
+                <!-- Gear icon for application settings (opens settings modal) -->
+                <button class="btn btn-light rounded-circle" onclick="showSettings()" title="Settings">
+                    <i class="bi bi-gear fs-5"></i>
+                </button>
+
+                <!-- User Profile Image -->
+                <!-- Placeholder avatar image for user profile -->
+                <img src="https://i.pravatar.cc/40" class="rounded-circle" alt="user profile">
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================================================ -->
+    <!-- MAIN CONTENT SECTION -->
+    <!-- Container for the entire recipe display area -->
+    <!-- ============================================================================ -->
+    <div class="container py-5">
+        <!-- Recipe Card - Main container for recipe display -->
+        <div class="card meal-card shadow-lg">
+            <div class="row g-0">
+                <!-- ==================================================================== -->
+                <!-- LEFT COLUMN: Recipe Image Section -->
+                <!-- Contains recipe image with overlay badges and stats -->
+                <!-- ==================================================================== -->
+                <div class="col-md-5 position-relative">
+                    <!-- Recipe Image - Will be dynamically populated by JavaScript -->
+                    <img id="meal-img" class="meal-img" alt="Recipe Image">
+
+                    <!-- Rating Badge - Will be dynamically populated by JavaScript -->
+                    <div class="position-absolute top-0 start-0 m-3">
+                        <span id="rating-badge" class="badge bg-light text-dark shadow">
+                            <!-- Rating will be added here by JavaScript -->
+                        </span>
+                    </div>
+
+                    <!-- Stats Box - Will be dynamically populated by JavaScript -->
+                    <div class="stats-box">
+                        <!-- Prep Time Stat -->
+                        <div>
+                            <i class="bi bi-clock text-warning"></i>
+                            <div id="prep-time" class="fw-bold">
+                                <!-- Prep time will be added here by JavaScript -->
+                            </div>
+                            <small>Prep Time</small>
+                        </div>
+
+                        <!-- Cook Time Stat -->
+                        <div>
+                            <i class="bi bi-fire text-danger"></i>
+                            <div id="cook-time" class="fw-bold">
+                                <!-- Cook time will be added here by JavaScript -->
+                            </div>
+                            <small>Cook Time</small>
+                        </div>
+
+                        <!-- Servings Stat -->
+                        <div>
+                            <i class="bi bi-people text-primary"></i>
+                            <div id="servings" class="fw-bold">
+                                <!-- Servings will be added here by JavaScript -->
+                            </div>
+                            <small>Servings</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================================================================== -->
+                <!-- RIGHT COLUMN: Recipe Details Section -->
+                <!-- Contains all recipe information, tabs, and action buttons -->
+                <!-- ==================================================================== -->
+                <div class="col-md-7 p-4">
+                    <!-- Recipe Category and Difficulty Badges -->
+                    <!-- Will be dynamically populated by JavaScript -->
+                    <div class="mb-2">
+                        <span id="difficulty" class="badge bg-success me-1">
+                            <!-- Difficulty will be added here by JavaScript -->
+                        </span>
+                        <span id="category" class="badge bg-primary">
+                            <!-- Category will be added here by JavaScript -->
+                        </span>
+                    </div>
+
+                    <!-- Recipe Title and Description -->
+                    <!-- Will be dynamically populated by JavaScript -->
+                    <h2 id="meal-name" class="fw-bold mt-2">
+                        <!-- Recipe name will be added here by JavaScript -->
+                    </h2>
+                    <p id="meal-desc" class="text-muted">
+                        <!-- Recipe description will be added here by JavaScript -->
+                    </p>
+
+                    <!-- Alert Box - Will be dynamically populated by JavaScript -->
+                    <div id="meal-alert" class="alert alert-warning mb-4 border-start border-4 border-warning">
+                        <!-- Alert message will be added here by JavaScript -->
+                    </div>
+
+                    <!-- ================================================================ -->
+                    <!-- TAB NAVIGATION -->
+                    <!-- Bootstrap tabs for organizing recipe content into sections -->
+                    <!-- ================================================================ -->
+                    <ul class="nav nav-tabs mb-3">
+                        <!-- Ingredients Tab Button -->
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#ingredients">
+                                <i class="bi bi-list-ul"></i> Ingredients
+                            </button>
+                        </li>
+
+                        <!-- Instructions Tab Button -->
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#instructions">
+                                <i class="bi bi-journal-text"></i> Instructions
+                            </button>
+                        </li>
+
+                        <!-- Nutrition Tab Button -->
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nutrition">
+                                <i class="bi bi-pie-chart"></i> Nutrition
+                            </button>
+                        </li>
+
+                        <!-- Tips Tab Button -->
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tips">
+                                <i class="bi bi-lightbulb"></i> Chef's Tips
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- ================================================================ -->
+                    <!-- TAB CONTENT AREA -->
+                    <!-- Scrollable container for tab content, dynamically populated -->
+                    <!-- ================================================================ -->
+                    <div class="tab-content-container">
+                        <div class="tab-content">
+                            <!-- Ingredients Tab Content -->
+                            <!-- Will be dynamically populated by JavaScript -->
+                            <div class="tab-pane fade show active" id="ingredients">
+                                <ul id="ingredients-list" class="list-group list-group-flush ingredients-list">
+                                    <!-- Ingredients will be added here by JavaScript -->
+                                </ul>
+                            </div>
+
+                            <!-- Instructions Tab Content -->
+                            <!-- Will be dynamically populated by JavaScript -->
+                            <div class="tab-pane fade" id="instructions">
+                                <ol id="instructions-list" class="list-group list-group-flush instructions-list">
+                                    <!-- Instructions will be added here by JavaScript -->
+                                </ol>
+                            </div>
+
+                            <!-- Nutrition Tab Content -->
+                            <!-- Will be dynamically populated by JavaScript -->
+                            <div class="tab-pane fade" id="nutrition">
+                                <!-- Nutrition Grid - Will be dynamically populated by JavaScript -->
+                                <div id="nutrition-grid" class="row g-0 nutrition-grid">
+                                    <!-- Nutrition cards will be added here by JavaScript -->
+                                </div>
+
+                                <!-- Nutrition Disclaimer -->
+                                <div class="mt-4 p-3 bg-light rounded">
+                                    <small class="text-muted">
+                                        <i class="bi bi-info-circle"></i> Nutrition values are per serving. Actual
+                                        values may vary based on specific ingredients used.
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Tips Tab Content -->
+                            <!-- Will be dynamically populated by JavaScript -->
+                            <div class="tab-pane fade" id="tips">
+                                <ul id="tips-list" class="list-group list-group-flush tips-list">
+                                    <!-- Tips will be added here by JavaScript -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ================================================================ -->
+                    <!-- ACTION BUTTONS -->
+                    <!-- Primary user actions for interacting with the recipe -->
+                    <!-- ================================================================ -->
+                    <div class="d-flex gap-3 mt-4">
+                        <!-- "Try Another Meal" Button -->
+                        <button class="btn btn-warning flex-grow-1" onclick="loadRandomMeal()">
+                            <i class="bi bi-arrow-clockwise me-2"></i> Try Another Meal 🍽️
+                        </button>
+
+                        <!-- "Print Recipe" Button -->
+                        <button class="btn btn-outline-primary" onclick="printRecipe()">
+                            <i class="bi bi-printer me-2"></i> Print Recipe
+                        </button>
+
+                        <!-- "Save Recipe" Button -->
+                        <button class="btn btn-outline-success" onclick="saveRecipe()">
+                            <i class="bi bi-bookmark-plus me-2"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // =============================================================================
+        // NUTRITION ICON MAPPING
+        // Maps nutrition labels to appropriate Bootstrap icons with descriptive names
+        // =============================================================================
+        const nutritionIcons = {
+            "Calories": "bi-thermometer-sun",        // Represents energy/heat
+            "Protein": "bi-box",                     // Represents building blocks
+            "Carbohydrates": "bi-pie-chart",         // Represents portion/pie chart
+            "Fat": "bi-circle",                      // Represents round/fat shape
+            "Fiber": "bi-tree",                      // Represents plant-based fiber
+            "Sodium": "bi-shield-exclamation",       // Represents caution/warning
+            "Sugars": "bi-star",                     // Represents sweet/desirable
+            "Saturated Fat": "bi-shield-slash"       // Represents blocked/shield
+        };
+
+        // =============================================================================
+        // RECIPES DATABASE
+        // Contains 5 complete recipes with all details for the application
+        // =============================================================================
+        const recipes = [
+            {
+                id: 1,
+                name: "French Onion Soup",
+                description: "Rich beef broth with caramelized onions and melted cheese",
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80",
+                difficulty: "Intermediate",
+                category: "Mediterranean",
+                prepTime: "15 min",
+                cookTime: "60 min",
+                servings: "4 people",
+                rating: "⭐ 4.7 (267 reviews)",
+                alert: "Extended Preparation Time – This recipe requires more than 45 minutes to prepare. Plan accordingly!",
+                ingredients: [
+                    "4 large onions, thinly sliced",
+                    "4 tbsp butter",
+                    "1 liter beef broth",
+                    "1/2 cup white wine",
+                    "2 bay leaves",
+                    "Fresh thyme",
+                    "Baguette slices",
+                    "Gruyère cheese (200g)",
+                    "Salt and black pepper to taste",
+                    "1 tbsp olive oil",
+                    "2 cloves garlic, minced",
+                    "1 tsp sugar (optional, for caramelization)"
+                ],
+                instructions: [
+                    "Melt butter in a large pot over medium heat. Add onions and cook slowly for 40 minutes, stirring occasionally until deeply caramelized.",
+                    "Add white wine and deglaze the pot, scraping up all the brown bits from the bottom for extra flavor.",
+                    "Pour in beef broth, add bay leaves and thyme. Bring to a simmer and cook for 20 minutes to allow flavors to meld.",
+                    "Meanwhile, toast baguette slices until golden brown and crisp. Rub lightly with garlic for extra flavor.",
+                    "Season the soup with salt and pepper to taste. Remove bay leaves and thyme sprigs.",
+                    "Ladle soup into oven-safe bowls. Top each with toasted bread and generous amount of grated Gruyère cheese.",
+                    "Broil for 3-5 minutes until cheese is melted, bubbly and golden brown. Serve immediately with extra baguette."
+                ],
+                nutrition: [
+                    { label: "Calories", value: "380 kcal" },
+                    { label: "Protein", value: "18g" },
+                    { label: "Carbohydrates", value: "36g" },
+                    { label: "Fat", value: "18g" },
+                    { label: "Fiber", value: "4g" },
+                    { label: "Sodium", value: "1200mg" },
+                    { label: "Sugars", value: "12g" },
+                    { label: "Saturated Fat", value: "8g" }
+                ],
+                tips: [
+                    "Patience is key - don't rush the onion caramelization. Slow cooking over medium-low heat develops the best flavor.",
+                    "Use good quality beef broth for best flavor. Homemade broth will elevate the soup significantly.",
+                    "Gruyère can be substituted with Swiss, Emmental, or a blend of mozzarella and parmesan if unavailable.",
+                    "Watch carefully when broiling to avoid burning the cheese. Every oven is different!",
+                    "Add a pinch of sugar to the onions if they're not caramelizing well due to low natural sugar content.",
+                    "For a vegetarian version, use mushroom or vegetable broth instead of beef broth.",
+                    "Soup tastes even better the next day as flavors continue to develop. Reheat gently before serving."
+                ]
+            },
+            {
+                id: 2,
+                name: "Spaghetti Carbonara",
+                description: "Classic Roman pasta with eggs, cheese, pancetta, and black pepper",
+                image: "https://images.unsplash.com/photo-1598866594230-a7c12756260f?auto=format&fit=crop&w=800&q=80",
+                difficulty: "Easy",
+                category: "Italian",
+                prepTime: "10 min",
+                cookTime: "20 min",
+                servings: "4 people",
+                rating: "⭐ 4.8 (312 reviews)",
+                alert: "Quick and Easy – Ready in 30 minutes or less!",
+                ingredients: [
+                    "400g spaghetti",
+                    "200g pancetta or guanciale, diced",
+                    "3 large eggs",
+                    "100g Pecorino Romano cheese, grated",
+                    "50g Parmesan cheese, grated",
+                    "Freshly ground black pepper",
+                    "Salt for pasta water",
+                    "2 cloves garlic, whole",
+                    "Extra virgin olive oil"
+                ],
+                instructions: [
+                    "Bring a large pot of salted water to boil and cook spaghetti according to package directions until al dente.",
+                    "While pasta cooks, heat olive oil in a large pan over medium heat. Add pancetta and cook until crispy.",
+                    "In a bowl, whisk together eggs, grated cheeses, and a generous amount of black pepper.",
+                    "Reserve 1 cup of pasta water before draining the spaghetti.",
+                    "Add drained spaghetti to the pan with pancetta, tossing to combine. Remove from heat.",
+                    "Quickly pour egg mixture over hot pasta, tossing continuously until creamy. Add pasta water as needed.",
+                    "Serve immediately with extra cheese and black pepper."
+                ],
+                nutrition: [
+                    { label: "Calories", value: "560 kcal" },
+                    { label: "Protein", value: "24g" },
+                    { label: "Carbohydrates", value: "65g" },
+                    { label: "Fat", value: "22g" },
+                    { label: "Fiber", value: "3g" },
+                    { label: "Sodium", value: "980mg" },
+                    { label: "Sugars", value: "4g" },
+                    { label: "Saturated Fat", value: "9g" }
+                ],
+                tips: [
+                    "Never add cream to authentic carbonara – the eggs and cheese create the perfect sauce.",
+                    "Work quickly when adding the egg mixture to prevent scrambling from residual heat.",
+                    "Use the best quality eggs you can find for richer flavor and color.",
+                    "Save pasta water – the starch helps emulsify the sauce.",
+                    "Guanciale (cured pork cheek) is traditional, but pancetta works well too.",
+                    "Serve immediately – carbonara doesn't wait well!"
+                ]
+            },
+            {
+                id: 3,
+                name: "Chicken Tikka Masala",
+                description: "Creamy tomato-based curry with grilled chicken pieces",
+                image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80",
+                difficulty: "Intermediate",
+                category: "Indian",
+                prepTime: "30 min",
+                cookTime: "40 min",
+                servings: "4 people",
+                rating: "⭐ 4.9 (421 reviews)",
+                alert: "Marination Required – Chicken needs at least 2 hours to marinate for best results",
+                ingredients: [
+                    "500g boneless chicken, cut into pieces",
+                    "1 cup yogurt",
+                    "2 tbsp lemon juice",
+                    "2 tbsp ginger-garlic paste",
+                    "2 tsp garam masala",
+                    "1 tsp turmeric",
+                    "1 tsp chili powder",
+                    "2 tbsp oil",
+                    "1 large onion, finely chopped",
+                    "400g canned tomatoes",
+                    "1 cup heavy cream",
+                    "Fresh cilantro for garnish",
+                    "Salt to taste"
+                ],
+                instructions: [
+                    "Marinate chicken with yogurt, lemon juice, ginger-garlic paste, and spices for at least 2 hours.",
+                    "Grill or pan-fry chicken until cooked through and slightly charred.",
+                    "In a separate pan, heat oil and sauté onions until golden brown.",
+                    "Add tomatoes and cook until oil separates from the mixture.",
+                    "Blend the tomato-onion mixture into a smooth paste.",
+                    "Return to pan, add cream and simmer for 10 minutes.",
+                    "Add cooked chicken pieces and simmer for another 5 minutes.",
+                    "Garnish with fresh cilantro and serve with rice or naan."
+                ],
+                nutrition: [
+                    { label: "Calories", value: "480 kcal" },
+                    { label: "Protein", value: "35g" },
+                    { label: "Carbohydrates", value: "18g" },
+                    { label: "Fat", value: "32g" },
+                    { label: "Fiber", value: "4g" },
+                    { label: "Sodium", value: "850mg" },
+                    { label: "Sugars", value: "10g" },
+                    { label: "Saturated Fat", value: "16g" }
+                ],
+                tips: [
+                    "For authentic flavor, use Kashmiri chili powder for color without too much heat.",
+                    "Don't skip the marination time – it tenderizes the chicken and develops flavor.",
+                    "Grill the chicken over high heat for authentic char marks.",
+                    "Adjust cream quantity to control the gravy thickness.",
+                    "For a lighter version, use Greek yogurt instead of heavy cream.",
+                    "Serve with basmati rice and fresh naan bread."
+                ]
+            },
+            {
+                id: 4,
+                name: "Beef Bourguignon",
+                description: "Classic French beef stew cooked in red wine with mushrooms and pearl onions",
+                image: "https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=800&q=80",
+                difficulty: "Advanced",
+                category: "French",
+                prepTime: "40 min",
+                cookTime: "3 hours",
+                servings: "6 people",
+                rating: "⭐ 4.9 (189 reviews)",
+                alert: "Slow Cooking Required – This recipe needs 3+ hours of simmering for best results",
+                ingredients: [
+                    "1.5kg beef chuck, cut into cubes",
+                    "200g bacon, chopped",
+                    "500ml red wine (Burgundy)",
+                    "2 cups beef broth",
+                    "1 tbsp tomato paste",
+                    "200g pearl onions",
+                    "300g mushrooms, quartered",
+                    "3 carrots, sliced",
+                    "3 cloves garlic, minced",
+                    "2 tbsp flour",
+                    "Fresh thyme and bay leaves",
+                    "Salt and pepper to taste"
+                ],
+                instructions: [
+                    "Pat beef dry and season with salt and pepper. Brown in batches in a Dutch oven.",
+                    "In same pot, cook bacon until crispy. Remove and set aside.",
+                    "Sauté onions, carrots, and garlic until softened.",
+                    "Add tomato paste and cook for 1 minute.",
+                    "Sprinkle flour over vegetables and cook for another minute.",
+                    "Deglaze with red wine, scraping up browned bits.",
+                    "Return beef and bacon to pot. Add broth, thyme, and bay leaves.",
+                    "Cover and simmer on low heat for 2.5-3 hours until beef is tender.",
+                    "Sauté mushrooms separately and add during last 30 minutes of cooking.",
+                    "Adjust seasoning and serve with mashed potatoes or crusty bread."
+                ],
+                nutrition: [
+                    { label: "Calories", value: "620 kcal" },
+                    { label: "Protein", value: "42g" },
+                    { label: "Carbohydrates", value: "22g" },
+                    { label: "Fat", value: "35g" },
+                    { label: "Fiber", value: "5g" },
+                    { label: "Sodium", value: "1100mg" },
+                    { label: "Sugars", value: "8g" },
+                    { label: "Saturated Fat", value: "14g" }
+                ],
+                tips: [
+                    "Use a good quality, drinkable red wine – it makes all the difference.",
+                    "Don't rush the browning of the meat – it adds essential flavor.",
+                    "Make a day ahead – the flavors improve overnight.",
+                    "Use a heavy-bottomed Dutch oven for even heat distribution.",
+                    "Serve with buttery mashed potatoes to soak up the delicious sauce.",
+                    "Freezes beautifully for up to 3 months."
+                ]
+            },
+            {
+                id: 5,
+                name: "Vegetable Pad Thai",
+                description: "Stir-fried rice noodles with tofu, vegetables, and tangy tamarind sauce",
+                image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", difficulty: "Easy",
+                category: "Thai",
+                prepTime: "20 min",
+                cookTime: "15 min",
+                servings: "3 people",
+                rating: "⭐ 4.6 (234 reviews)",
+                alert: "Quick Vegetarian Option – Ready in under 30 minutes!",
+                ingredients: [
+                    "200g rice noodles",
+                    "200g firm tofu, cubed",
+                    "2 eggs",
+                    "1 cup bean sprouts",
+                    "3 green onions, chopped",
+                    "1/4 cup roasted peanuts, crushed",
+                    "2 tbsp tamarind paste",
+                    "2 tbsp fish sauce (or soy sauce for vegetarian)",
+                    "1 tbsp palm sugar",
+                    "1 tbsp lime juice",
+                    "2 cloves garlic, minced",
+                    "Red chili flakes to taste",
+                    "Vegetable oil for frying"
+                ],
+                instructions: [
+                    "Soak rice noodles in warm water for 30 minutes until pliable but not soft.",
+                    "Mix tamarind paste, fish sauce, palm sugar, and lime juice to make sauce.",
+                    "Heat oil in wok. Add tofu and fry until golden. Remove and set aside.",
+                    "Add garlic and chili to wok. Push to side and scramble eggs.",
+                    "Add drained noodles and sauce. Toss to combine and cook for 2 minutes.",
+                    "Add tofu, bean sprouts, and green onions. Toss for another minute.",
+                    "Serve immediately topped with crushed peanuts and lime wedges."
+                ],
+                nutrition: [
+                    { label: "Calories", value: "420 kcal" },
+                    { label: "Protein", value: "18g" },
+                    { label: "Carbohydrates", value: "65g" },
+                    { label: "Fat", value: "12g" },
+                    { label: "Fiber", value: "6g" },
+                    { label: "Sodium", value: "950mg" },
+                    { label: "Sugars", value: "14g" },
+                    { label: "Saturated Fat", value: "2g" }
+                ],
+                tips: [
+                    "Prep all ingredients before starting to cook – pad thai cooks very quickly.",
+                    "Don't oversoak the noodles – they'll continue cooking in the wok.",
+                    "Use a wok or large skillet for best results.",
+                    "Adjust sweet-sour balance to your taste with more sugar or lime.",
+                    "For protein variation, add shrimp or chicken instead of tofu.",
+                    "Serve with extra lime wedges, chili flakes, and fish sauce on the side."
+                ]
+            }
+        ];
+
+        // =============================================================================
+        // APPLICATION STATE VARIABLES
+        // =============================================================================
+        let currentRecipeIndex = 0; // Tracks which recipe is currently displayed
+
+        // =============================================================================
+        // FUNCTION: loadRandomMeal()
+        // Loads a random recipe from the database and displays it
+        // =============================================================================
+        function loadRandomMeal() {
+            // Generate a new random index different from the current one
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * recipes.length);
+            } while (newIndex === currentRecipeIndex && recipes.length > 1);
+
+            // Update the current recipe index and display the recipe
+            currentRecipeIndex = newIndex;
+            displayRecipe(currentRecipeIndex);
+
+            // Add a subtle visual feedback animation
+            const mealCard = document.querySelector('.meal-card');
+            mealCard.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                mealCard.style.transform = 'scale(1)';
+                mealCard.style.transition = 'transform 0.3s ease';
+            }, 100);
+        }
+
+        // =============================================================================
+        // FUNCTION: displayRecipe(index)
+        // Updates all UI elements with data from the specified recipe
+        // =============================================================================
+        function displayRecipe(index) {
+            const recipe = recipes[index];
+
+            // Update basic recipe information in the UI
+            updateBasicRecipeInfo(recipe);
+
+            // Update recipe content sections
+            updateIngredientsList(recipe);
+            updateInstructionsList(recipe);
+            updateNutritionGrid(recipe);
+            updateTipsList(recipe);
+
+            // Update UI styling based on recipe properties
+            updateAlertStyling(recipe);
+            updateDifficultyBadge(recipe);
+
+            // Show notification to user
+            showToast(`Loaded: ${recipe.name}`);
+        }
+
+        // =============================================================================
+        // HELPER FUNCTION: updateBasicRecipeInfo(recipe)
+        // Updates the main recipe information section
+        // =============================================================================
+        function updateBasicRecipeInfo(recipe) {
+            document.getElementById('meal-img').src = recipe.image;
+            document.getElementById('meal-name').textContent = recipe.name;
+            document.getElementById('meal-desc').textContent = recipe.description;
+            document.getElementById('difficulty').textContent = recipe.difficulty;
+            document.getElementById('category').textContent = recipe.category;
+            document.getElementById('prep-time').textContent = recipe.prepTime;
+            document.getElementById('cook-time').textContent = recipe.cookTime;
+            document.getElementById('servings').textContent = recipe.servings;
+            document.getElementById('rating-badge').textContent = recipe.rating;
+
+            // Update alert message (split into title and description)
+            const alertParts = recipe.alert.split(' – ');
+            document.getElementById('meal-alert').innerHTML =
+                `⚠️ <strong>${alertParts[0]}</strong> – ${alertParts[1]}`;
+        }
+
+        // =============================================================================
+        // HELPER FUNCTION: updateIngredientsList(recipe)
+        // Populates the ingredients list with recipe ingredients
+        // =============================================================================
+        function updateIngredientsList(recipe) {
+            const ingredientsList = document.getElementById('ingredients-list');
+            ingredientsList.innerHTML = '';
+
+            recipe.ingredients.forEach(ingredient => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = ingredient;
+                ingredientsList.appendChild(li);
+            });
+        }
+
+        // =============================================================================
+        // HELPER FUNCTION: updateInstructionsList(recipe)
+        // Populates the instructions list with recipe steps
+        // =============================================================================
+        function updateInstructionsList(recipe) {
+            const instructionsList = document.getElementById('instructions-list');
+            instructionsList.innerHTML = '';
+
+            recipe.instructions.forEach((instruction, i) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.innerHTML = `<strong>Step ${i + 1}:</strong> ${instruction}`;
+                instructionsList.appendChild(li);
+            });
+        }
+
+        // =============================================================================
+        // HELPER FUNCTION: updateNutritionGrid(recipe)
+        // Creates the nutrition grid with icons and values
+        // =============================================================================
+        function updateNutritionGrid(recipe) {
+            const nutritionGrid = document.getElementById('nutrition-grid');
+            nutritionGrid.innerHTML = '';
+
+            recipe.nutrition.forEach(item => {
+                // Get the appropriate icon for this nutrition item, fallback to question mark
+                const iconClass = nutritionIcons[item.label] || 'bi-question-circle';
+
+                // Create column element for the nutrition item
+                const col = document.createElement('div');
+                col.className = 'col-6 col-md-3';
+
+                // Build the nutrition card HTML
+                col.innerHTML = `
+                <div class="card h-100 text-center border-start border-1 border-warning">
+                    <div class="card-body p-2 d-flex flex-column justify-content-center overflow-hidden">
+                        <!-- Nutrition Icon -->
+                        <div class="mb-2">
+                            <i class="bi ${iconClass} fs-4 text-warning"></i>
+                        </div>
+                        <!-- Nutrition Value -->
+                        <div class="fw-bold fs-5 mb-1 text-truncate">${item.value}</div>
+                        <!-- Nutrition Label -->
+                        <div class="text-muted small text-truncate">${item.label}</div>
+                    </div>
+                </div>
+            `;
+                nutritionGrid.appendChild(col);
+            });
+        }
+
+        // =============================================================================
+        // HELPER FUNCTION: updateTipsList(recipe)
+        // Populates the chef's tips list
+        // =============================================================================
+        function updateTipsList(recipe) {
+            const tipsList = document.getElementById('tips-list');
+            tipsList.innerHTML = '';
+
+            recipe.tips.forEach(tip => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.innerHTML = `<strong>${tip.split(' – ')[0]}</strong>${tip.includes(' – ') ? ' – ' + tip.split(' – ')[1] : ''}`;
+                tipsList.appendChild(li);
+            });
+        }
+
+        // =============================================================================
+        // HELPER FUNCTION: updateAlertStyling(recipe)
+        // Updates the alert box styling based on alert type
+        // =============================================================================
+        function updateAlertStyling(recipe) {
+            const alertDiv = document.getElementById('meal-alert');
+            alertDiv.className = 'alert mb-4 border-start border-4';
+
+            // Apply different styling based on alert content
+            if (recipe.alert.includes('Extended') || recipe.alert.includes('Slow')) {
+                alertDiv.classList.add('alert-warning', 'border-warning');
+            } else if (recipe.alert.includes('Marination')) {
+                alertDiv.classList.add('alert-info', 'border-info');
+            } else if (recipe.alert.includes('Quick')) {
+                alertDiv.classList.add('alert-success', 'border-success');
+            }
+        }
+
+        // =============================================================================
+        // HELPER FUNCTION: updateDifficultyBadge(recipe)
+        // Updates the difficulty badge color based on difficulty level
+        // =============================================================================
+        function updateDifficultyBadge(recipe) {
+            const difficultyBadge = document.getElementById('difficulty');
+            difficultyBadge.className = 'badge me-1';
+
+            // Apply color based on difficulty level
+            if (recipe.difficulty === 'Easy') {
+                difficultyBadge.classList.add('bg-success');
+            } else if (recipe.difficulty === 'Intermediate') {
+                difficultyBadge.classList.add('bg-warning', 'text-dark');
+            } else {
+                difficultyBadge.classList.add('bg-danger');
+            }
+        }
+
+        // =============================================================================
+        // FUNCTION: showToast(message)
+        // Displays a temporary notification message to the user
+        // =============================================================================
+        function showToast(message) {
+            // Remove existing toast if present
+            const existingToast = document.getElementById('recipe-toast');
+            if (existingToast) existingToast.remove();
+
+            // Create new toast element
+            const toast = document.createElement('div');
+            toast.id = 'recipe-toast';
+            toast.className = 'position-fixed bottom-0 end-0 p-3';
+            toast.style.zIndex = '1050';
+
+            // Build toast HTML
+            toast.innerHTML = `
+                <div class="toast show" role="alert">
+                    <div class="toast-header bg-warning text-white">
+                        <i class="bi bi-check-circle me-2"></i>
+                        <strong class="me-auto">Recipe Updated</strong>
+                        <button type="button" class="btn-close btn-close-white" onclick="this.closest('.toast').remove()"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(toast);
+
+            // Auto-remove toast after 3 seconds
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 3000);
+        }
+
+        // =============================================================================
+        // FUNCTION: saveRecipe()
+        // Saves the current recipe to user's favorites (simulated with localStorage)
+        // =============================================================================
+        function saveRecipe() {
+            const recipe = recipes[currentRecipeIndex];
+
+            // Show confirmation message
+            showToast(`Saved "${recipe.name}" to your favorites!`);
+
+            // Save to localStorage (simulated favorites feature)
+            const savedRecipes = JSON.parse(localStorage.getItem('savedRecipes') || '[]');
+            if (!savedRecipes.some(r => r.id === recipe.id)) {
+                savedRecipes.push({ id: recipe.id, name: recipe.name });
+                localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
+            }
+        }
+
+        // =============================================================================
+        // FUNCTION: printRecipe()
+        // Opens the browser's print dialog for printing the recipe
+        // =============================================================================
+        function printRecipe() {
+            window.print();
+        }
+
+        // =============================================================================
+        // FUNCTION: showSettings()
+        // Shows a placeholder for settings functionality
+        // =============================================================================
+        function showSettings() {
+            alert('Settings would open here. Features could include:\n\n• Dietary preferences\n• Cooking skill level\n• Meal planning\n• Grocery list generation\n• Notifications');
+        }
+
+        // =============================================================================
+        // PAGE INITIALIZATION
+        // Runs when the DOM is fully loaded
+        // =============================================================================
+        document.addEventListener('DOMContentLoaded', function () {
+            // Load a random recipe when page loads
+            loadRandomMeal();
+
+            // Initialize Bootstrap tabs functionality
+            initializeBootstrapTabs();
+        });
+
+        // =============================================================================
+        // HELPER FUNCTION: initializeBootstrapTabs()
+        // Sets up Bootstrap tab functionality
+        // =============================================================================
+        function initializeBootstrapTabs() {
+            const triggerTabList = document.querySelectorAll('button[data-bs-toggle="tab"]');
+            triggerTabList.forEach(triggerEl => {
+                const tabTrigger = new bootstrap.Tab(triggerEl);
+                triggerEl.addEventListener('click', event => {
+                    event.preventDefault();
+                    tabTrigger.show();
+                });
+            });
+        }
+
+        // =============================================================================
+        // KEYBOARD SHORTCUTS
+        // Provides keyboard navigation for the application
+        // =============================================================================
+        document.addEventListener('keydown', function (e) {
+            // Ctrl+R or F5 to load random recipe (overrides page refresh)
+            if ((e.ctrlKey && e.key === 'r') || e.key === 'F5') {
+                e.preventDefault();
+                loadRandomMeal();
+            }
+
+            // Spacebar to load random recipe (when not focused on form elements)
+            if (e.code === 'Space' && !e.target.matches('input, textarea')) {
+                e.preventDefault();
+                loadRandomMeal();
+            }
+        });
+    </script>
+
+</body>
+
+</html>
