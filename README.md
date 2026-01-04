@@ -7,15 +7,9 @@
 ---
 
 ## 🚀 Live Demo
-🔗 [[View Live Demo](https://your-username.github.io/whats-for-dinner)  
+🔗 https://sweet-souffle-341a26.netlify.app/ 
 *((https://www.awesomescreenshot.com/video/47673793?key=48c112f9ca5299d19dd140ac6c2e243d))*
 ](https://www.awesomescreenshot.com/video/47673793?key=48c112f9ca5299d19dd140ac6c2e243d)
-
-## 📸 Screenshots
-<img width="1896" height="928" alt="image" src="https://github.com/user-attachments/assets/5466299b-95be-4442-8a35-6bb7a24fced1" />
-<img width="1891" height="928" alt="image" src="https://github.com/user-attachments/assets/505c404f-e370-4250-b75e-12503af71b78" />
-<img width="1882" height="930" alt="image" src="https://github.com/user-attachments/assets/943563b0-e4dc-49b6-96d7-91134e9dd759" />
-<img width="1874" height="930" alt="image" src="https://github.com/user-attachments/assets/f0bf65ad-40c7-4504-8f16-b2a5e175db19" />
 
 ---
 
